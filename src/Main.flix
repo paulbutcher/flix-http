@@ -23,7 +23,11 @@ def main(): Unit & Impure =
 
     let server = newServer(8080);
     let handler = object AbstractHandler {
-        def handle(_this: AbstractHandler, _target: String, jettyRequest: Request, _request: HttpServletRequest, response: HttpServletResponse): Unit =
+        def handle(_this: AbstractHandler, 
+                   _target: String, 
+                   jettyRequest: Request, 
+                   _request: HttpServletRequest, 
+                   response: HttpServletResponse): Unit =
             setHandled(jettyRequest, true);
             setStatus(response, 200);
             setContentType(response as ServletResponse, "text/html; charset=UTF-8");
