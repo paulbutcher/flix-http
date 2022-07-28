@@ -1,13 +1,13 @@
-type alias AbstractHandler = ##org.eclipse.jetty.server.handler.AbstractHandler
-type alias AbstractLifeCycle = ##org.eclipse.jetty.util.component.AbstractLifeCycle
-type alias Handler = ##org.eclipse.jetty.server.Handler
-type alias HandlerWrapper = ##org.eclipse.jetty.server.handler.HandlerWrapper
-type alias HttpServletRequest = ##jakarta.servlet.http.HttpServletRequest
-type alias HttpServletResponse = ##jakarta.servlet.http.HttpServletResponse
-type alias Server = ##org.eclipse.jetty.server.Server
-type alias ServletResponse = ##jakarta.servlet.ServletResponse
-type alias PrintWriter = ##java.io.PrintWriter
-type alias Request = ##org.eclipse.jetty.server.Request
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.HandlerWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.Server;
+import jakarta.servlet.ServletResponse;
+import java.io.PrintWriter;
+import org.eclipse.jetty.server.Request;
 
 // The main entry point.
 def main(): Unit & Impure =
