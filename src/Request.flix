@@ -30,43 +30,65 @@ namespace HTTP {
     server:: String,
     remoteAddress:: String,
     uri:: String,
-    queryString:: String,
+    queryString:: Option[String],
     scheme:: String,
     method:: Method,
     protocol:: String,
     headers:: Headers,
-    contentType:: String,
-    contentLength:: Int32,
-    characterEncoding:: String,
-    body:: ServletInputStream
+    contentType:: Option[String],
+    contentLength:: Int64,
+    characterEncoding:: Option[String],
+    body:: ServletInputStream,
+
+    uriParts:: List[String],
+    queryMap:: Map[String, String]
   }
 
-  pub def mkRequest(request: HttpServletRequest): Request =
-    import jakarta.servlet.ServletRequest.getServerPort(): Int32 & Pure;
-    import jakarta.servlet.ServletRequest.getServerName(): String & Pure;
-    import jakarta.servlet.ServletRequest.getRemoteAddr(): String & Pure;
-    import jakarta.servlet.http.HttpServletRequest.getRequestURI(): String & Pure;
-    import jakarta.servlet.http.HttpServletRequest.getQueryString(): String & Pure;
-    import jakarta.servlet.ServletRequest.getScheme(): String & Pure;
-    import jakarta.servlet.http.HttpServletRequest.getMethod(): String & Pure;
-    import jakarta.servlet.ServletRequest.getProtocol(): String & Pure;
-    import jakarta.servlet.ServletRequest.getContentType(): String & Pure;
-    import jakarta.servlet.ServletRequest.getContentLength(): Int32 & Pure;
-    import jakarta.servlet.ServletRequest.getCharacterEncoding(): String & Pure;
-    import jakarta.servlet.ServletRequest.getInputStream(): ServletInputStream & Pure;
+  /// Todo: handle double slashes etc.
+  def mkUriParts(uri: String): List[String] =
+    uri |> String.splitOn(substr = "/")
+
+  def mkQueryMap(maybeS: Option[String]): Map[String, String] = match maybeS {
+    case None => Map#{}
+    case Some(s) =>
+      s |> String.splitOn(substr = "&") 
+        |> List.map(String.breakOnLeft(substr = "="))
+        |> List.map(match (k, v) -> (k, v |> String.dropLeft(1)))
+        |> List.toMap
+  }
+  
+  pub def mkRequest(request: HttpServletRequest): Request & Impure =  
+    import jakarta.servlet.ServletRequest.getServerPort(): Int32;
+    import jakarta.servlet.ServletRequest.getServerName(): String;
+    import jakarta.servlet.ServletRequest.getRemoteAddr(): String;
+    import jakarta.servlet.http.HttpServletRequest.getRequestURI(): String;
+    import jakarta.servlet.http.HttpServletRequest.getQueryString(): String;
+    import jakarta.servlet.ServletRequest.getScheme(): String;
+    import jakarta.servlet.http.HttpServletRequest.getMethod(): String;
+    import jakarta.servlet.ServletRequest.getProtocol(): String;
+    import jakarta.servlet.ServletRequest.getContentType(): String;
+    import jakarta.servlet.ServletRequest.getContentLengthLong(): Int64;
+    import jakarta.servlet.ServletRequest.getCharacterEncoding(): String;
+    import jakarta.servlet.ServletRequest.getInputStream(): ServletInputStream;
+
+    let uri = getRequestURI(request);
+    let queryString = getQueryString(request) |> Object.toOption;
     {
       port = getServerPort(request as ServletRequest),
       server = getServerName(request as ServletRequest),
       remoteAddress = getRemoteAddr(request as ServletRequest),
-      uri = getRequestURI(request),
-      queryString = getQueryString(request),
+      uri = uri,
+      queryString = queryString,
       scheme = getScheme(request as ServletRequest),
       method = mkMethod(getMethod(request)),
       protocol = getProtocol(request as ServletRequest),
       headers = mkHeaders(request),
-      contentType = getContentType(request as ServletRequest),
-      contentLength = getContentLength(request as ServletRequest),
-      characterEncoding = getCharacterEncoding(request as ServletRequest),
-      body = getInputStream(request as ServletRequest)
+      contentType = getContentType(request as ServletRequest) |> Object.toOption,
+      contentLength = getContentLengthLong(request as ServletRequest),
+      characterEncoding = getCharacterEncoding(request as ServletRequest) |> Object.toOption,
+      body = getInputStream(request as ServletRequest),
+      
+      uriParts = mkUriParts(uri),
+      queryMap = mkQueryMap(queryString)
     }
 }

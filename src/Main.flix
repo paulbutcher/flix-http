@@ -28,13 +28,13 @@ def main(): Unit & Impure =
     def handle(_this: AbstractHandler, 
                _target: String, 
                jettyRequest: Request, 
-               _request: HttpServletRequest, 
+               request: HttpServletRequest, 
                response: HttpServletResponse): Unit =
       setHandled(jettyRequest, true);
       setStatus(response, 200);
       setContentType(response as ServletResponse, "text/html; charset=UTF-8");
       let writer = getWriter(response as ServletResponse);
-      print(writer, "<h1>Hello from Flix!</h1>")
+      print(writer, handle(HTTP.mkRequest(request)))
   };
   setHandler(server as HandlerWrapper, handler as Handler);
   start(server as AbstractLifeCycle);
