@@ -6,7 +6,7 @@ namespace HTTP {
       import java.util.regex.Pattern.matcher(##java.lang.CharSequence): ##java.util.regex.Matcher & Pure;
       import java.util.regex.Matcher.find(): Bool & Pure;
       import java.util.regex.Matcher.group(Int32): String & Pure;
-      let regex = String.replace(from = "$", to = "(.*)", p);
+      let regex = String.replace(from = "$", to = "([^/]*)", p);
       let pattern = compile(regex);
       let matches = matcher(pattern, s as ##java.lang.CharSequence);
       if (find(matches))
