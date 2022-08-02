@@ -2,17 +2,20 @@ namespace HTTP {
   namespace Routes {
 
     def getMatches(p: String, arity: Int32, s: String): Option[List[String]] =
-      import static java.util.regex.Pattern.compile(String): ##java.util.regex.Pattern & Pure;
-      import java.util.regex.Pattern.matcher(##java.lang.CharSequence): ##java.util.regex.Matcher & Pure;
-      import java.util.regex.Matcher.find(): Bool & Pure;
-      import java.util.regex.Matcher.group(Int32): String & Pure;
-      let regex = String.replace(from = "$", to = "([^/]*)", p);
-      let pattern = compile(regex);
-      let matches = matcher(pattern, s as ##java.lang.CharSequence);
-      if (find(matches))
-        Some(List.range(0, arity) |> List.map(i -> group(matches, i + 1)))
-      else
-        None
+      region r {
+        import static java.util.regex.Pattern.compile(String): ##java.util.regex.Pattern & r;
+        import java.util.regex.Pattern.matcher(##java.lang.CharSequence): ##java.util.regex.Matcher & r;
+        import java.util.regex.Matcher.find(): Bool & r;
+        import java.util.regex.Matcher.group(Int32): String & r;
+        let _ = r; // Defeat unused variable warning
+        let regex = String.replace(from = "$", to = "([^/]*)", p);
+        let pattern = compile(regex);
+        let matches = matcher(pattern, s as ##java.lang.CharSequence);
+        if (find(matches))
+          Some(List.range(0, arity) |> List.map(i -> group(matches, i + 1)))
+        else
+          None
+      }
 
     pub def *>(p: String, f: Unit -> String, s: String): Option[String] =
       match getMatches(p, 0, s) {
