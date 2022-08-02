@@ -5,15 +5,16 @@ namespace HTTP {
   }
 
   def mkMethod(s: String): Method =
-    let method = Map#{"GET" => GET,
-     "HEAD" => HEAD,
-     "POST" => POST,
-     "PUT" => PUT,
-     "DELETE" => DELETE,
-     "CONNECT" => CONNECT,
-     "OPTIONS" => OPTIONS,
-     "TRACE" => TRACE,
-     "PATCH" => PATCH};
+    let method = Map#{
+      "GET" => GET,
+      "HEAD" => HEAD,
+      "POST" => POST,
+      "PUT" => PUT,
+      "DELETE" => DELETE,
+      "CONNECT" => CONNECT,
+      "OPTIONS" => OPTIONS,
+      "TRACE" => TRACE,
+      "PATCH" => PATCH};
     match Map.get(s, method) {
       case Some(m) => m
       case None => bug!("Invalid HTTP method")
