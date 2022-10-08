@@ -24,7 +24,7 @@ def main(): Unit & Impure =
   import org.eclipse.jetty.util.component.AbstractLifeCycle.start(): Unit & Impure;
 
   let server = newServer(8080);
-  let handler = object AbstractHandler {
+  let handler = new AbstractHandler {
     def handle(_this: AbstractHandler, 
                _target: String, 
                jettyRequest: Request, 
