@@ -1,5 +1,8 @@
 namespace HTTP {
 
+import jakarta.servlet.{ServletInputStream, ServletRequest};
+import jakarta.servlet.http.HttpServletRequest;
+
   pub enum Method {
     case GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
   }
