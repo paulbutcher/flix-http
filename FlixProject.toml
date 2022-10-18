@@ -1,0 +1,10 @@
+[project]
+name = "flix-http"
+version = "0.1.0"
+flix = "0.32.0"
+description = "The beginnings of a Flix HTTP server"
+paths = ["src"]
+
+[dependencies]
+"org.eclipse.jetty:jetty-server".mvn = "11.0.12"
+"org.slf4j:slf4j-simple".mvn = "2.0.3"
