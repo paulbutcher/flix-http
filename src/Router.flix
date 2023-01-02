@@ -10,7 +10,7 @@ namespace HTTP {
         let _ = r; // Defeat unused variable warning
         let regex = String.replace(from = "$", to = "([^/]*)", p);
         let pattern = compile(regex);
-        let matches = matcher(pattern, s as ##java.lang.CharSequence);
+        let matches = matcher(pattern, upcast s);
         if (find(matches))
           Some(List.range(0, arity) |> List.map(i -> group(matches, i + 1)))
         else

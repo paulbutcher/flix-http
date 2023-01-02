@@ -31,10 +31,10 @@ def main(): Unit & Impure =
                response: HttpServletResponse): Unit =
       setHandled(jettyRequest, true);
       setStatus(response, 200);
-      setContentType(response as ServletResponse, "text/html; charset=UTF-8");
-      let writer = getWriter(response as ServletResponse);
+      setContentType(upcast response, "text/html; charset=UTF-8");
+      let writer = getWriter(upcast response);
       print(writer, handle(HTTP.mkRequest(request)))
   };
-  setHandler(server as HandlerWrapper, handler as Handler);
-  start(server as AbstractLifeCycle);
+  setHandler(upcast server, upcast handler);
+  start(upcast server);
   join(server)

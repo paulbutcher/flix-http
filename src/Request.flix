@@ -30,22 +30,22 @@ import jakarta.servlet.http.HttpServletRequest;
     Map#{}
     
   pub type alias Request = {
-    port:: Int32,
-    server:: String,
-    remoteAddress:: String,
-    uri:: String,
-    queryString:: Option[String],
-    scheme:: String,
-    method:: Method,
-    protocol:: String,
-    headers:: Headers,
-    contentType:: Option[String],
-    contentLength:: Int64,
-    characterEncoding:: Option[String],
-    body:: ServletInputStream,
+    port = Int32,
+    server = String,
+    remoteAddress = String,
+    uri = String,
+    queryString = Option[String],
+    scheme = String,
+    method = Method,
+    protocol = String,
+    headers = Headers,
+    contentType = Option[String],
+    contentLength = Int64,
+    characterEncoding = Option[String],
+    body = ServletInputStream,
 
-    uriParts:: List[String],
-    queryMap:: Map[String, String]
+    uriParts = List[String],
+    queryMap = Map[String, String]
   }
 
   /// Todo: handle double slashes etc.
@@ -78,19 +78,19 @@ import jakarta.servlet.http.HttpServletRequest;
     let uri = getRequestURI(request);
     let queryString = getQueryString(request) |> Object.toOption;
     {
-      port = getServerPort(request as ServletRequest),
-      server = getServerName(request as ServletRequest),
-      remoteAddress = getRemoteAddr(request as ServletRequest),
+      port = getServerPort(upcast request),
+      server = getServerName(upcast request),
+      remoteAddress = getRemoteAddr(upcast request),
       uri = uri,
       queryString = queryString,
-      scheme = getScheme(request as ServletRequest),
+      scheme = getScheme(upcast request),
       method = mkMethod(getMethod(request)),
-      protocol = getProtocol(request as ServletRequest),
+      protocol = getProtocol(upcast request),
       headers = mkHeaders(request),
-      contentType = getContentType(request as ServletRequest) |> Object.toOption,
-      contentLength = getContentLengthLong(request as ServletRequest),
-      characterEncoding = getCharacterEncoding(request as ServletRequest) |> Object.toOption,
-      body = getInputStream(request as ServletRequest),
+      contentType = getContentType(upcast request) |> Object.toOption,
+      contentLength = getContentLengthLong(upcast request),
+      characterEncoding = getCharacterEncoding(upcast request) |> Object.toOption,
+      body = getInputStream(upcast request),
       
       uriParts = mkUriParts(uri),
       queryMap = mkQueryMap(queryString)
